@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, getDocs, serverTimestamp } from 'firebase/firestore';
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react'
@@ -9,9 +9,9 @@ import { Empty } from '../Redux/action/index';
 
 const Order = () => {
     const [formData, setFormData] = useState({
-        name: "",
         address: "",
-        phone: ""
+        phone: "",
+        city: ""
     })
     //error message store in state
     const [errorMsg, setErrorMsg] = useState({});
@@ -20,11 +20,16 @@ const Order = () => {
     //reducer value get
     const State = useSelector((state) => state.AddProduct);
     //databse collection
-    const userCollection = collection(db, "OrderRecord");
+    const userCollection = collection(db, "order-detail");
+    const userCollection2 = collection(db, "orders");
+
     //set email id
     const [Email, setEmail] = useState();
+    //set login name in use  state
+    const [Name, setName] = useState();
     //set id
     const [id, setId] = useState();
+    const [orderId , setOrderId] =useState("")
     //redux action target use
     const Dispatch = useDispatch();
 
@@ -48,52 +53,71 @@ const Order = () => {
     const validate = (value) => {
         let error = {}; // store error
         //check the input filed value is empty or not
-        if (!value.name) {
-            error.name = "Please Enter the name"
-        }
         if (!value.address) {
             error.address = "Please Enter the address"
         }
         if (!value.phone) {
             error.phone = "Please Enter the Phone Number"
         }
-
+        if (!value.city) {
+            error.city = "Please Enter the city"
+        }
         return error;
     }
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        const {  address, phone, city } = formData;
+        const Shipping = localStorage.getItem("Shipping");
+        const subTotal = localStorage.getItem("Total") - Shipping;
+        const Discount = localStorage.getItem("Promotion");
+        const GrandTotal = localStorage.getItem("Grand-total")
+        
+        const res = await addDoc(userCollection2,{
+            Name,
+            address,
+            phone,
+            Email,
+            city,
+            Date: serverTimestamp(),
+            userId: id,
+            subTotal,
+            Shipping,
+            Discount,
+            GrandTotal
+        })
+        if (res) {
+            setFormData({
+                address: " ",
+                phone: " ",
+            })
+        // eslint-disable-next-line no-lone-blocks
         {
             State.map(async (item) => {
-                const { name, address, phone } = formData;
                 const { title, quantity, sizes, img, price } = item;
                 //store data in database functionlity
-                const res = await addDoc(userCollection, {
-                    name,
-                    address,
-                    phone,
-                    userId: id,
-                    Email,
-                    title,
+                const res1 = await addDoc(userCollection, {
+                    ProductName: title,
                     quantity,
                     sizes,
                     img,
                     price,
-                    orderId: Math.random().toString().slice(2, 8),
-                    Date: serverTimestamp()
+                    orderId : res.id,
+                    Date: serverTimestamp(),
+
                 })
-                if (res) {
+                if (res1) {
                     Dispatch(Empty())
-                    setFormData({
-                        name: " ",
-                        address: " ",
-                        phone: " ",
-                    })
+                    localStorage.removeItem("Shipping");
+                    localStorage.removeItem("Total")
+                    localStorage.removeItem("Promotion");
+                    localStorage.removeItem("Grand-total")
+                    localStorage.removeItem("coupon")
                     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
                     navigate("/thanks")
                 }
             })
         }
     }
-
+}
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -101,6 +125,9 @@ const Order = () => {
             }
             if (user) {
                 setId(user.uid)
+            }
+            if (user) {
+                setName(user.displayName)
             }
         })
     })
@@ -124,17 +151,12 @@ const Order = () => {
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label">FullName</label>
                                         <input type="text"
-                                            className={errorMsg.name && "input-error border-danger"}
                                             id="exampleFormControlInput1"
                                             placeholder="enter the name"
                                             name="name"
-                                            value={formData.name}
-                                            autoComplete="off"
-                                            onChange={InputEvent}
+                                            value={Name}
                                         />
                                     </div>
-                                    {/* error msg display */}
-                                    <div className='errorshow'>{errorMsg.name} </div>
 
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput2" className="form-label">Email</label>
@@ -160,10 +182,24 @@ const Order = () => {
                                     <div className='errorshow'>{errorMsg.address} </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput4" className="form-label">Mobile No</label>
+                                        <label htmlFor="exampleFormControlInput4" className="form-label">City</label>
+                                        <input type="text"
+                                            className={errorMsg.city && "input-error border-danger"}
+                                            id="exampleFormControlInput4"
+                                            placeholder="enter the city"
+                                            name="city"
+                                            value={formData.city}
+                                            autoComplete="off"
+                                            onChange={InputEvent}
+                                        />
+                                    </div> {/* error msg display */}
+                                    <div className='errorshow'>{errorMsg.city} </div>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleFormControlInput5" className="form-label">Mobile No</label>
                                         <input type="number"
                                             className={errorMsg.phone && "input-error border-danger"}
-                                            id="exampleFormControlInput4"
+                                            id="exampleFormControlInput5"
                                             name="phone"
                                             value={formData.phone}
                                             autoComplete="off"

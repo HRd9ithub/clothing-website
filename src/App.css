@@ -424,7 +424,7 @@ button.btn.Addcard:hover {
 
 /*----------------------card style -------------------*/
 .shoppingcard {
-  height: 393px;
+  height: 520px;
   /* position: relative; */
 }
 
@@ -476,9 +476,9 @@ input.quntity-input {
   margin-right: 12px;
 }
 
-table.table.summary {
-  width: 50%;
-  margin-left: 351px;
+.table.summary {
+  width: 40%;
+  margin-left: 375px;
   /* margin-bottom: 158px; */
 }
 
@@ -489,6 +489,37 @@ button.btn.btn-outline-primary.checkout {
 
 td.text-end.me-5 {
   padding-right: 24px;
+}
+
+.coupon-dropdown-group label {
+  font-size: 22px;
+  margin-right: 11px;
+}
+
+select.coupon-dropdown {
+  width: 50%;
+  border: 2px solid;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.coupon-dropdown-group {
+  margin-left: 130px;
+}
+
+.coupon-button {
+  padding: 8px;
+  margin-left: 10px;
+  border: 2px solid black;
+  border-radius: 8px;
+  background: #aaa;
+  color: #fff;
+}
+
+span.error-msg {
+  color: red;
+  font-size: 15px;
+  /* padding-top: 81px; */
 }
 
 /*------------------------checkout style -------------------------*/
@@ -522,8 +553,12 @@ td.order-size {
 }
 
 /*--------table 2 checkout page -----*/
+.edit i.fa-solid.fa-left-long {
+  margin-right: 10px;
+}
+
 .order-right-table {
-  height: 182px;
+  height: 285px;
 }
 
 .text-center.order-summary {
@@ -545,7 +580,7 @@ button.btn.btn-outline-primary.order-button {
 /*----------------------order style ------------------*/
 
 .order-info {
-  height: 640px;
+  height: 790px;
 }
 
 h3.page-title {
@@ -629,8 +664,9 @@ button.action-delete {
 
 /*-----------------------order view page style -------------------*/
 .orderview-page {
-  height: 430px;
+  height: 1105px;
 }
+
 img.orderview-image:hover {
   transform: scale(1.1);
 }

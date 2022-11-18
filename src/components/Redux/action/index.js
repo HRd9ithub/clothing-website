@@ -22,8 +22,16 @@ export const DecQuantity = (item) => {
         payload : item
     }
 }
+export const ChangeSize = (size,item) => {
+    return{
+        type : "CHANGESIZE",
+        payload :{ size,item}
+    }
+}
 export const Empty = () => {
     return{
         type : "EMPTY"
     }
 }
+
+

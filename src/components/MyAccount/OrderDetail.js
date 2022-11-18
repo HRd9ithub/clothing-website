@@ -12,7 +12,7 @@ const OrderDetail = () => {
     //store in database data in array
     const [card, setCard] = useState([]);
     //database collection
-    const userCollection = collection(db, "OrderRecord");
+    const userCollection = collection(db, "orders");
     //loader in toggle of help state
     const [loader, setLoader] = useState(false);
 
@@ -37,11 +37,11 @@ const OrderDetail = () => {
         getUser();
     }, [id]);
 
-    //database data delete funtionlity
-    const orderDelete = async (item) => {
-        const userDoc = doc(db, "OrderRecord", item.id);
-        await deleteDoc(userDoc)
-    }
+    // //database data delete funtionlity
+    // const orderDelete = async (item) => {
+    //     const userDoc = doc(db, "order-detail", item.id);
+    //     await deleteDoc(userDoc)
+    // }
 
 
 
@@ -53,14 +53,18 @@ const OrderDetail = () => {
                         <label className='l'>order Detail</label>
                     </div>
                     <div className='order-detail'>
-                        <div className='col-md-11'>
+                        <div className='col-12'>
                             <table className='table order-detail-table'>
                                 <thead>
                                     <tr>
-                                        <th>image</th>
-                                        <th>title</th>
-                                        <th>quantity</th>
-                                        <th>price</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>city</th>
+                                        <th>phone</th>
+                                        <th>SubTotal</th>
+                                        <th>Shipping Free</th>
+                                        <th>Discount</th>
+                                        <th>GrandTotal</th>
                                         <th>Date</th>
                                         <th>action</th>
                                     </tr>
@@ -70,23 +74,21 @@ const OrderDetail = () => {
                                         return (
                                             <>
                                                 <tr key={item.id}>
-                                                    <td><img src={item.img}
-                                                        size="medium"
-                                                        style={{
-                                                            width: "70px",
-                                                            height: "70px"
-                                                        }}
-                                                    /></td>
-                                                    <td>{item.title}</td>
-                                                    <td>{item.quantity}</td>
-                                                    <td>${item.price * item.quantity}</td>
+                                                    <td>{item.Name}</td>
+                                                    <td>{item.address}</td>
+                                                    <td>{item.city}</td>
+                                                    <td>{item.phone}</td>
+                                                    <td>${item.subTotal}</td>
+                                                    <td>{item.Shipping}</td>
+                                                    <td>{item.Discount}</td>
+                                                    <td>${item.GrandTotal}</td>
                                                     <td>{item.Date.toDate().toLocaleString()}</td>
                                                     <td>
                                                         <div className='action'>
-                                                            <NavLink to={`/orderview/${item.orderId}`}>
+                                                            <NavLink to={`/orderview/${item.id}`}>
                                                                 <button className="action-view">view</button>
                                                             </NavLink>
-                                                            <button className="action-delete" onClick={() => orderDelete(item)}><i className="fa-solid fa-trash"></i></button>
+                                                            {/* <button className="action-delete" onClick={() => orderDelete(item)}><i className="fa-solid fa-trash"></i></button> */}
                                                         </div>
                                                     </td>
                                                 </tr>

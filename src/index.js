@@ -5,16 +5,23 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
+import { AppProvider } from './components/Add_cart/Context';
 import store from './components/Redux/store';
 
 // store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
+ 
   <React.StrictMode>
     <BrowserRouter >
-   <Provider store={store}><App /></Provider>
+   <Provider store={store}>
+    <AppProvider>
+    <App />
+    </AppProvider>
+    </Provider>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
+,
 document.getElementById('root')
 );
 

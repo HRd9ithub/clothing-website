@@ -8,8 +8,9 @@ import { db } from '../../firebase';
 const OrderView = () => {
     //next page click item id in get of use 
     const param = useParams();
+    console.log(param.id)
     //database collection
-    const userCollection = collection(db, "OrderRecord");
+    const userCollection = collection(db, "order-detail");
     const [card, setCard] = useState([])
 
     useEffect(() => {
@@ -23,7 +24,7 @@ const OrderView = () => {
             })))
         }
         getUser()
-    })
+    },[])
 
     return (
         <>
@@ -40,13 +41,11 @@ const OrderView = () => {
                                     </div>
                                     <div className='col-md-6'>
                                         <div className='orderview-info mt-5'>
-                                            <h2 className='orderview-title'>{item.title}</h2>
+                                            <h2 className='orderview-title'>{item.ProductName}</h2>
                                             <hr />
                                             <h4 className='orderview-price'>Price   :<span> ${item.price} </span> </h4>
                                             <h5 className='orderview-size'>Sizes   :<span> {item.sizes} </span></h5>
                                             <h5 className='orderview-quantity'>Quantity   :<span> {item.quantity}</span> </h5>
-                                            <h6 className='orderview-phone'>Phone number   :<span> {item.phone} </span></h6>
-                                            <p className='orderview-address'>Address   :<span> {item.address} </span></p>
                                         </div>
                                     </div>
                                 </>

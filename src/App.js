@@ -18,6 +18,7 @@ import Order from './components/Add_cart/Order';
 import Thanks from './components/Common/Thanks';
 import TabPanel from './components/MyAccount/TabPanel';
 import OrderView from './components/MyAccount/OrderView';
+import { AppProvider } from './components/Add_cart/Context';
 
 const App = () => {
   //use state in used of loader component of toggle
@@ -31,6 +32,7 @@ const App = () => {
   }, [])
   return (
     <>
+    <AppProvider>
       {/* toggle component */}
       {loading ? <Loader /> : <>
         <Header />
@@ -51,6 +53,7 @@ const App = () => {
         <Footer />
         <GoToTop />
       </>}
+      </AppProvider>
     </>
   )
 }
